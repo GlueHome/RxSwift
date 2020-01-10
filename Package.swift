@@ -15,22 +15,6 @@ extension Product {
 }
 
 extension Target {
-  static func rxCocoa() -> [Target] {
-    #if os(Linux)
-      return [.target(name: "RxCocoa", dependencies: ["RxSwift", "RxRelay"])]
-    #else
-      return [.target(name: "RxCocoa", dependencies: ["RxSwift", "RxRelay", "RxCocoaRuntime"])]
-    #endif
-  }
-
-  static func rxCocoaRuntime() -> [Target] {
-    #if os(Linux)
-      return []
-    #else
-      return [.target(name: "RxCocoaRuntime", dependencies: ["RxSwift"])]
-    #endif
-  }
-
   static func allTests() -> [Target] {
     if buildTests {
       return [.target(name: "AllTestz", dependencies: ["RxSwift", "RxCocoa", "RxBlocking", "RxTest"])]
@@ -48,8 +32,6 @@ let package = Package(
   products: ([
     [
       .library(name: "RxSwift", type: .dynamic, targets: ["RxSwift"]),
-      .library(name: "RxCocoa", type: .dynamic, targets: ["RxCocoa"]),
-      .library(name: "RxRelay", targets: ["RxRelay"]),
       .library(name: "RxBlocking", targets: ["RxBlocking"]),
     ],
     Product.allTests()
@@ -57,11 +39,8 @@ let package = Package(
   targets: ([
     [
       .target(name: "RxSwift", dependencies: []),
-    ], 
-    Target.rxCocoa(),
-    Target.rxCocoaRuntime(),
+    ],
     [
-      .target(name: "RxRelay", dependencies: ["RxSwift"]),
       .target(name: "RxBlocking", dependencies: ["RxSwift"]),
     ],
     Target.allTests()
